@@ -1,5 +1,7 @@
 #![allow(dead_code, unused_imports)]
 
+use std::collections::HashMap;
+
 use crate::*;
 use crate::ecs::*;
 
@@ -99,14 +101,13 @@ impl Mesh {
 }
 
 
-pub trait UniformsList: glium::uniforms::Uniforms { }
-
-
 #[derive(Component)]
 pub struct Shader {
-    program: glium::program::Program,
-    uniforms: Box<dyn glium::uniforms::Uniforms>,
+    program: glium::Program,
+    uniforms: HashMap<String, glium::uniforms::UniformValue<'static>>,
 }
+
+impl Shader { }
 
 
 // TODO: create default materials
@@ -124,7 +125,6 @@ pub struct Material {
 pub struct Renderable {
     mesh: Mesh,
     material: Material,
-    shader: glium::program::Program,
 }
 
 impl Renderable {
@@ -175,6 +175,13 @@ pub struct Transform {
  * The shader struct should contain the program and it's uniforms, which should be built on demand.
  *
  *  pub fn render(mesh: &Mesh, material: Option<&Material>, shader: Option<&Shader>, target: &mut glium::Frame, _display: &glium::Display) {}
+ * */
+
+/* TODO: Put the renderer in a system (a struct with a display field) that will be added to the scene at creation */
+
+/* The Shader component will have a function that takes its owner id to let it access the necessary
+ * data and build the uniforms. To do this, write something that will allow the user to search for
+ * the right custom data from the components in the ecs.
  * */
 
 // TODO: uniforms
